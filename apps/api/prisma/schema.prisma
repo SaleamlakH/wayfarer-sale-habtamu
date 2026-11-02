@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String    @id @default(uuid())
+  name     String
+  reviews  Review[]
+  bookings Booking[]
+
+  @@map("users")
+}
+
+model Category {
+  id     String  @id @default(uuid())
+  name   String
+  places Place[]
+
+  @@map("categories")
+}
+
+model Place {
+  id           String     @id @default(uuid())
+  name         String
+  categoryId   String     @map("category_id")
+  description  String
+  openingHours String     @map("opening_hours")
+  category     Category   @relation(fields: [categoryId], references: [id])
+  reviews      Review[]
+  tourSlots    TourSlot[]
+
+  @@index([categoryId])
+  @@map("places")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  placeId   String   @map("place_id")
+  place     Place    @relation(fields: [placeId], references: [id])
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  rating    Int
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([placeId, userId])
+  @@map("reviews")
+}
+
+model TourSlot {
+  id       String    @id @default(uuid())
+  placeId  String    @map("place_id")
+  place    Place     @relation(fields: [placeId], references: [id])
+  startsAt DateTime  @map("starts_at")
+  capacity Int
+  bookings Booking[]
+
+  @@index([placeId, startsAt])
+  @@map("tour_slots")
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  slotId    String   @map("slot_id")
+  slot      TourSlot @relation(fields: [slotId], references: [id])
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  seats     Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([slotId])
+  @@map("bookings")
+}
