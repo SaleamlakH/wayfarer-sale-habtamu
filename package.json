@@ -1,0 +1,27 @@
+{
+  "name": "weyfarer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:types": "pnpm --filter @weyfarer/types build",
+    "build": "pnpm build:types && pnpm -r build",
+    "dev": "pnpm build:types && pnpm -r --parallel dev",
+    "typecheck": "pnpm build:types && pnpm -r typecheck",
+    "test": "pnpm --filter api test",
+    "db:migrate": "pnpm --filter api db:migrate",
+    "db:seed": "pnpm --filter api db:seed"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.16.1",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.16.1",
+  "type": "module"
+}
