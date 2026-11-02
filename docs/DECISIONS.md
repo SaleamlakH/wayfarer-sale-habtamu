@@ -88,8 +88,6 @@ Its responsibilities include:
 - API error codes.
 - API error response shapes.
 
-Database models and internal implementation types remain within the API.
-
 This separation prevents frontend contracts from becoming coupled to the database schema or backend implementation.
 
 ## 4. Dependency Injection
@@ -165,7 +163,40 @@ The ranking calculation must account for both:
 
 A place with very few reviews should not automatically outrank a place with a substantially larger and consistently positive review history.
 
-The final ranking formula and its parameters must be documented here after implementation and evaluation against the seeded data.
+### Ranking Method: Bayesian Weighted Rating
+
+Wayfarer uses the **Bayesian Weighted Rating** method to rank places based on both their average ratings and the reliability of those ratings.
+
+The objective is to ensure that a place's ranking reflects not only how positively it has been rated, but also how much evidence supports that rating. A place with five 5-star reviews should not automatically outrank a place with hundreds of reviews averaging 4.8 stars.
+
+**Formula:**
+
+$$
+Score = \frac{v}{v+m}R + \frac{m}{v+m}C
+$$
+
+Where:
+
+- **R:** The place's own average rating.
+- **v:** The total number of reviews for that place.
+- **m:** A configurable minimum review-count threshold that controls how much evidence is required before trusting a place's own rating.
+- **C:** The overall average rating across the reference population of places.
+
+**Data scope:** The overall average rating (`C`) will be calculated using the entire available dataset of places, rather than a sample.
+
+**Why this method is chosen**
+
+The formula balances a place's individual rating against the overall average rating. When a place has relatively few reviews, its score stays closer to the overall average. As its review count increases, its individual rating receives more influence over its final ranking.
+
+This prevents places with very few reviews from gaining disproportionately high rankings based on limited feedback, while allowing consistently well-rated places with sufficient reviews to earn higher positions.
+
+The threshold `m` provides control over ranking sensitivity. A higher threshold makes the ranking more conservative, requiring more reviews before individual ratings have substantial influence. A lower threshold makes it more responsive to places with fewer reviews.
+
+**Why simple ratios are not suitable**
+
+Using the ratio of review count to average rating (`v / R`) would incorrectly favor places with more reviews, even when their average ratings are lower. This makes review volume disproportionately influential while failing to properly reward rating quality.
+
+Reversing the ratio (`R / v`) would create the opposite problem: places with very few reviews could receive disproportionately high scores. This makes limited feedback disproportionately influential while failing to account for the reliability of the rating.
 
 ### Verification
 
@@ -173,7 +204,7 @@ The ranking calculation will have a dedicated unit test covering:
 
 - Places with identical average ratings but different review counts.
 - Places with different average ratings and review counts.
-- Places with very few reviews.
+- Places with very few reviews (at least one with 1-2 reviews).
 - The expected ordering of representative places.
 
 ## 8. Booking and Concurrency
@@ -262,15 +293,15 @@ The order in which concurrent transactions acquire the slot lock determines whic
 
 Testing is focused on application behavior and the areas most vulnerable to incorrect implementation.
 
-### Unit Tests
+### Highest Priority
 
-- Rating calculation and ranking logic.
+- Rating calculation: verify that ranking accounts for both average rating and review count.
+- Concurrent booking: verify that simultaneous booking requests cannot exceed slot capacity.
 
-### Integration Tests
+### Additional
 
 - Review creation.
 - Updating an existing review.
-- Concurrent booking requests.
 - Insufficient booking capacity.
 - Slot availability calculations.
 - User identification through request headers.

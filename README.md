@@ -243,15 +243,18 @@ The API test suite covers the application's important business rules and data co
 
 The test suite includes:
 
-| Test                  | Purpose                                                                                |
-| --------------------- | -------------------------------------------------------------------------------------- |
-| Rating calculation    | Verify that ranking accounts for both average rating and review count.                 |
-| Review creation       | Verify that the first review creates a database record.                                |
-| Review update         | Verify that subsequent reviews from the same user update the existing record.          |
-| Concurrent booking    | Verify that simultaneous booking requests cannot exceed slot capacity.                 |
-| Insufficient capacity | Verify that bookings are rejected when the requested quantity exceeds available seats. |
-| Slot availability     | Verify remaining seat calculations and full-slot status.                               |
-| User identification   | Verify identification through the `X-User-Id` header.                                  |
+### Highest Priority
+
+- Rating calculation: verify that ranking accounts for both average rating and review count.
+- Concurrent booking: verify that simultaneous booking requests cannot exceed slot capacity.
+
+### Additional
+
+- Review creation: verify that the first review creates a database record.
+- Review update: verify that subsequent reviews from the same user update the existing record.
+- Insufficient capacity: verify that bookings are rejected when the requested quantity exceeds available seats.
+- Slot availability: verify remaining seat calculations and full-slot status.
+- User identification: verify identification through the `X-User-Id` header.
 
 All required tests should be executable through a single command.
 
