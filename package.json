@@ -10,6 +10,7 @@
     "typecheck": "pnpm build:types && pnpm -r typecheck",
     "test": "pnpm --filter api test",
     "db:migrate": "pnpm --filter api db:migrate",
+    "db:generate": "pnpm --filter api db:generate",
     "db:seed": "pnpm --filter api db:seed"
   },
   "keywords": [],
