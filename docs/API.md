@@ -17,6 +17,7 @@ This document describes the endpoints listed in the README API overview, includi
 | ------ | ---------------------------------- | ------------------------------------------------- | ------------ |
 | GET    | `/health`                          | Check that the API is running.                    | Not required |
 | GET    | `/api/users`                       | List predefined users for the acting-as selector. | Optional     |
+| GET    | `/api/categories`                  | List categories for filtering places.             | Not required |
 | GET    | `/api/places`                      | List places with category filtering and sorting.  | Optional     |
 | GET    | `/api/places/:placeId`             | Get place details and tour availability.          | Optional     |
 | GET    | `/api/places/:placeId/reviews`     | List reviews for a place.                         | Optional     |
@@ -83,7 +84,22 @@ No parameters.
 ]
 ```
 
-## 6. Places
+## 6. Categories
+
+### `GET /api/categories`
+
+Returns all categories in alphabetical order by name.
+
+**Response `200 OK`**
+
+```json
+[
+  { "id": "category_1", "name": "Culture" },
+  { "id": "category_2", "name": "Food" }
+]
+```
+
+## 7. Places
 
 ### `GET /api/places`
 
@@ -153,7 +169,7 @@ An unknown category ID returns an empty array.
 
 - `404 PLACE_NOT_FOUND`
 
-## 7. Reviews
+## 8. Reviews
 
 ### `GET /api/places/:placeId/reviews`
 
@@ -223,7 +239,7 @@ Creates the acting user's review for the place, or updates it when the user alre
 - `401 USER_NOT_FOUND`
 - `404 PLACE_NOT_FOUND`
 
-## 8. Bookings
+## 9. Bookings
 
 ### `POST /api/tour-slots/:slotId/bookings`
 

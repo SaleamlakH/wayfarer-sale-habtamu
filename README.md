@@ -268,6 +268,7 @@ The API provides the following main operations. Request and response contracts, 
 | -------- | ----------------------- | ---------------------------------------------------------------------------------- |
 | Health   | Check API status        | Returns `Hello` when the API is running.                                           |
 | Users    | Fetch users             | Retrieve predefined users for the acting-as selector.                              |
+| Categories | List categories       | Retrieve categories for filtering places.                                          |
 | Places   | List places             | Retrieve places with category filtering and rating-based sorting.                  |
 | Places   | Get place details       | Retrieve place information and tour slot availability.                             |
 | Bookings | Create booking          | Reserve a requested quantity of seats in a tour slot.                              |
