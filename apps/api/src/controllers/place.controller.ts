@@ -10,5 +10,13 @@ export function createPlaceController(
       const places = await placeService.listPlaces(req.validQuery ?? {});
       res.json(places);
     },
+
+    getById: async (req: Request, res: Response): Promise<void> => {
+      const place = await placeService.getPlaceById(
+        req.params.placeId as string,
+      );
+
+      res.json(place);
+    },
   };
 }

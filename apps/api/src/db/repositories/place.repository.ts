@@ -3,6 +3,7 @@ import type {
   PlaceFilters,
   PlaceRepository,
   PlaceWithReviews,
+  PlaceWithTourSlots,
 } from "../../types/repositories.js";
 
 export function createPrismaPlaceRepository(
@@ -25,7 +26,21 @@ export function createPrismaPlaceRepository(
         orderBy: { name: "asc" },
       });
     },
-    
+
+    findById(id: string): Promise<PlaceWithTourSlots | null> {
+      return prisma.place.findUnique({
+        where: { id },
+        include: {
+          category: true,
+          reviews: { select: { rating: true } },
+          tourSlots: {
+            orderBy: { startsAt: "asc" },
+            include: { bookings: { select: { seats: true } } },
+          },
+        },
+      });
+    },
+
     async getOverallAverageRating(): Promise<number | null> {
       const result = await prisma.review.aggregate({
         _avg: { rating: true },

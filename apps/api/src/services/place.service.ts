@@ -1,9 +1,10 @@
-import type { GetPlacesQuery, Place } from "@weyfarer/types";
+import type { GetPlacesQuery, Place, PlaceDetail } from "@weyfarer/types";
 import type {
   PlaceRepository,
   PlaceWithReviews,
 } from "../types/repositories.js";
 import type { PlaceService } from "../types/services.js";
+import { AppError } from "../errors/app-error.js";
 import { calculateWeightedRating } from "../utils/ranking.js";
 
 function calculateAverageRating(ratings: number[]): number {
@@ -71,6 +72,41 @@ export function createPlaceService(
       });
 
       return sortedPlaces.map((scoredPlace) => scoredPlace.place);
+    },
+
+    async getPlaceById(placeId: string): Promise<PlaceDetail> {
+      const place = await placeRepository.findById(placeId);
+
+      if (!place) {
+        throw new AppError(
+          "PLACE_NOT_FOUND",
+          "The requested place was not found.",
+          404,
+        );
+      }
+
+      const tourSlots = place.tourSlots.map((slot) => {
+        const bookedSeats = slot.bookings.reduce(
+          (total, booking) => total + booking.seats,
+          0,
+        );
+        const remainingSeats = slot.capacity - bookedSeats;
+
+        return {
+          id: slot.id,
+          placeId: slot.placeId,
+          startsAt: slot.startsAt.toISOString(),
+          capacity: slot.capacity,
+          bookedSeats,
+          remainingSeats,
+          isFull: remainingSeats <= 0,
+        };
+      });
+
+      return {
+        ...toPlace(place),
+        tourSlots,
+      };
     },
   };
 }

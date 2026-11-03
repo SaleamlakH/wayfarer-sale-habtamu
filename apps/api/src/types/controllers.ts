@@ -6,6 +6,7 @@ export interface UserController {
 
 export interface PlaceController {
   list: (req: Request, res: Response) => Promise<void>;
+  getById: (req: Request, res: Response) => Promise<void>;
 }
 
 export interface CategoryController {

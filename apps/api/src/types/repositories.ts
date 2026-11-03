@@ -14,12 +14,25 @@ export interface PlaceWithReviews {
   reviews: { rating: number }[];
 }
 
+export interface TourSlotWithBookings {
+  id: string;
+  placeId: string;
+  startsAt: Date;
+  capacity: number;
+  bookings: { seats: number }[];
+}
+
+export interface PlaceWithTourSlots extends PlaceWithReviews {
+  tourSlots: TourSlotWithBookings[];
+}
+
 export interface PlaceFilters {
   categoryId?: string;
 }
 
 export interface PlaceRepository {
   findAll(filters: PlaceFilters): Promise<PlaceWithReviews[]>;
+  findById(id: string): Promise<PlaceWithTourSlots | null>;
   getOverallAverageRating(): Promise<number | null>;
 }
 

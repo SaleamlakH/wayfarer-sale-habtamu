@@ -23,6 +23,7 @@ describe("place service listPlaces", () => {
           reviews: Array.from({ length: 100 }, () => ({ rating: 4.8 })),
         },
       ],
+      findById: async () => null,
       getOverallAverageRating: async () => (100 * 4.8 + 4.5) / 101,
     };
 

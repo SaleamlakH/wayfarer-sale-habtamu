@@ -5,5 +5,6 @@ import type { PlaceController } from "../types/controllers.js";
 export function createPlaceRouter(controller: PlaceController): Router {
   const router: Router = Router();
   router.get("/", placesQueryMiddleware, controller.list);
+  router.get("/:placeId", controller.getById);
   return router;
 }
