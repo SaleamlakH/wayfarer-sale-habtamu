@@ -163,6 +163,8 @@ The ranking calculation must account for both:
 
 A place with very few reviews should not automatically outrank a place with a substantially larger and consistently positive review history.
 
+> Having more reviews does not guarantee that a place will outrank a place with a higher rating but fewer reviews. Its rating must be supported by sufficient evidence to be considered reliable (see more on the ranking method behaviors).
+
 ### Ranking Method: Bayesian Weighted Rating
 
 Wayfarer uses the **Bayesian Weighted Rating** method to rank places based on both their average ratings and the reliability of those ratings.
@@ -173,6 +175,10 @@ The objective is to ensure that a place's ranking reflects not only how positive
 
 $$
 Score = \frac{v}{v+m}R + \frac{m}{v+m}C
+$$
+
+$$
+Score = C + \frac{v}{v+m}(R-C)
 $$
 
 Where:
@@ -192,11 +198,31 @@ This prevents places with very few reviews from gaining disproportionately high 
 
 The threshold `m` provides control over ranking sensitivity. A higher threshold makes the ranking more conservative, requiring more reviews before individual ratings have substantial influence. A lower threshold makes it more responsive to places with fewer reviews.
 
-**Why simple ratios are not suitable**
+### Ranking Behavior
 
-Using the ratio of review count to average rating (`v / R`) would incorrectly favor places with more reviews, even when their average ratings are lower. This makes review volume disproportionately influential while failing to properly reward rating quality.
+The Bayesian weighting formula balances the target place's actual rating against the overall average. Its behavior is influenced by two related factors:
 
-Reversing the ratio (`R / v`) would create the opposite problem: places with very few reviews could receive disproportionately high scores. This makes limited feedback disproportionately influential while failing to account for the reliability of the rating.
+**1. Target Rating Relative to the Overall Average**
+
+The difference between the target rating and the overall average is the primary factor determining the direction and magnitude of the score adjustment.
+
+- A rating significantly above the overall average produces a higher weighted score.
+- A rating slightly above the overall average produces a smaller increase.
+- A rating equal to the overall average produces no adjustment, regardless of review count.
+- A rating below the overall average produces a lower weighted score.
+
+Consequently, having a high review count does not automatically result in a higher ranking. A place must also have a rating that justifies its position relative to the overall average.
+
+**2. Review Count Difference Between Places**
+
+The relative difference in review counts between competing places influences their ranking positions.
+
+- When review counts are close, differences in their actual ratings have a stronger influence on the ranking.
+- When one place has considerably more reviews, its rating receives relatively more weight, potentially allowing it to outrank a place with a higher average rating but fewer reviews.
+- However, a sufficiently higher average rating can still allow a place with fewer reviews to outrank a place with more reviews.
+
+This is expected behavior: review count differences influence how much rating advantage a place with fewer reviews needs to maintain a higher ranking.
+
 
 ### Verification
 
