@@ -25,5 +25,13 @@ export function createPrismaPlaceRepository(
         orderBy: { name: "asc" },
       });
     },
+    
+    async getOverallAverageRating(): Promise<number | null> {
+      const result = await prisma.review.aggregate({
+        _avg: { rating: true },
+      });
+
+      return result._avg.rating;
+    },
   };
 }

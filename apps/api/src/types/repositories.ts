@@ -20,6 +20,7 @@ export interface PlaceFilters {
 
 export interface PlaceRepository {
   findAll(filters: PlaceFilters): Promise<PlaceWithReviews[]>;
+  getOverallAverageRating(): Promise<number | null>;
 }
 
 export interface CategoryRepository {

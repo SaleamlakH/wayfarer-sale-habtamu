@@ -13,6 +13,7 @@ import { createUserRouter } from "./routes/user.routes.js";
 import { createPlaceRouter } from "./routes/place.routes.js";
 import { createCategoryRouter } from "./routes/category.routes.js";
 import { createAuthMiddleware } from "./middleware/auth.js";
+import { MINIMUM_REVIEW_COUNT } from "./utils/ranking.js";
 
 const userRepository = createPrismaUserRepository(prisma);
 const userService = createUserService(userRepository);
@@ -21,7 +22,9 @@ const userController = createUserController(userService);
 export const usersRoute = createUserRouter(userController);
 
 const placeRepository = createPrismaPlaceRepository(prisma);
-const placeService = createPlaceService(placeRepository);
+const placeService = createPlaceService(placeRepository, {
+  minimumReviewCount: MINIMUM_REVIEW_COUNT,
+});
 const placeController = createPlaceController(placeService);
 
 export const placesRoute = createPlaceRouter(placeController);
