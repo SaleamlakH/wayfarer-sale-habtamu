@@ -1,4 +1,4 @@
-import type { Place } from "@weyfarer/types";
+import type { GetPlacesQuery, Place } from "@weyfarer/types";
 import type { PlaceRepository } from "../types/repositories.js";
 import type { PlaceService } from "../types/services.js";
 
@@ -15,8 +15,10 @@ export function createPlaceService(
   placeRepository: PlaceRepository,
 ): PlaceService {
   return {
-    async listPlaces(): Promise<Place[]> {
-      const places = await placeRepository.findAll();
+    async listPlaces(query: GetPlacesQuery): Promise<Place[]> {
+      const places = await placeRepository.findAll({
+        categoryId: query.categoryId,
+      });
 
       return places.map((place) => {
         const ratings = place.reviews.map((review) => review.rating);

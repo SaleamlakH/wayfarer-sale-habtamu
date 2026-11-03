@@ -1,5 +1,6 @@
 import type { PrismaClient } from "../../../generated/prisma/client.js";
 import type {
+  PlaceFilters,
   PlaceRepository,
   PlaceWithReviews,
 } from "../../types/repositories.js";
@@ -8,8 +9,11 @@ export function createPrismaPlaceRepository(
   prisma: PrismaClient,
 ): PlaceRepository {
   return {
-    findAll(): Promise<PlaceWithReviews[]> {
+    findAll(filters: PlaceFilters): Promise<PlaceWithReviews[]> {
       return prisma.place.findMany({
+        where: filters.categoryId
+          ? { categoryId: filters.categoryId }
+          : undefined,
         select: {
           id: true,
           name: true,

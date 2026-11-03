@@ -14,8 +14,12 @@ export interface PlaceWithReviews {
   reviews: { rating: number }[];
 }
 
+export interface PlaceFilters {
+  categoryId?: string;
+}
+
 export interface PlaceRepository {
-  findAll(): Promise<PlaceWithReviews[]>;
+  findAll(filters: PlaceFilters): Promise<PlaceWithReviews[]>;
 }
 
 export interface CategoryRepository {

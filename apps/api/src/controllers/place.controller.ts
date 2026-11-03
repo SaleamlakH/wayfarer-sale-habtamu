@@ -2,13 +2,13 @@ import type { Request, Response } from "express";
 import type { PlaceController } from "../types/controllers.js";
 import type { PlaceService } from "../types/services.js";
 
-function createPlaceController(placeService: PlaceService): PlaceController {
+export function createPlaceController(
+  placeService: PlaceService,
+): PlaceController {
   return {
-    list: async (_req: Request, res: Response): Promise<void> => {
-      const places = await placeService.listPlaces();
+    list: async (req: Request, res: Response): Promise<void> => {
+      const places = await placeService.listPlaces(req.validQuery ?? {});
       res.json(places);
     },
   };
 }
-
-export { createPlaceController };

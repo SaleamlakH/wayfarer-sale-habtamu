@@ -1,10 +1,9 @@
 import { Router } from "express";
+import { placesQueryMiddleware } from "../middleware/places-query.js";
 import type { PlaceController } from "../types/controllers.js";
 
-function createPlaceRouter(controller: PlaceController): Router {
+export function createPlaceRouter(controller: PlaceController): Router {
   const router: Router = Router();
-  router.get("/", controller.list);
+  router.get("/", placesQueryMiddleware, controller.list);
   return router;
 }
-
-export { createPlaceRouter };
