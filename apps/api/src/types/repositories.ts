@@ -1,8 +1,19 @@
-import type { User } from "@weyfarer/types";
+import type { Category, User } from "@weyfarer/types";
 
-interface UserRepository {
+export interface UserRepository {
   findAll(): Promise<User[]>;
   findById(id: string): Promise<User | null>;
 }
 
-export type { UserRepository };
+export interface PlaceWithReviews {
+  id: string;
+  name: string;
+  description: string;
+  openingHours: string;
+  category: Category;
+  reviews: { rating: number }[];
+}
+
+export interface PlaceRepository {
+  findAll(): Promise<PlaceWithReviews[]>;
+}

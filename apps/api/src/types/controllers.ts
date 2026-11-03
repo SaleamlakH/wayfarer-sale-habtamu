@@ -1,7 +1,9 @@
 import type { Request, Response } from "express";
 
-interface UserController {
+export interface UserController {
   list: (req: Request, res: Response) => Promise<void>;
 }
 
-export type { UserController };
+export interface PlaceController {
+  list: (req: Request, res: Response) => Promise<void>;
+}

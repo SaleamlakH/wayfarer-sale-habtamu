@@ -1,7 +1,9 @@
-import type { User } from "@weyfarer/types";
+import type { Place, User } from "@weyfarer/types";
 
-interface UserService {
+export interface UserService {
   listUsers(): Promise<User[]>;
 }
 
-export type { UserService };
+export interface PlaceService {
+  listPlaces(): Promise<Place[]>;
+}
