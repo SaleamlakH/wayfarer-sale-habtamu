@@ -56,7 +56,7 @@ export interface Review {
   user: User;
   rating: number;
   body: string;
-  createdAt: string;
+  createdAt: Date;
 }
 
 export interface Booking {
