@@ -1,4 +1,4 @@
-import type { Review } from "@weyfarer/types";
+import type { CreateReviewRequest, Review } from "@weyfarer/types";
 import type { PrismaClient } from "../../../generated/prisma/client.js";
 import type {
   PlaceFilters,
@@ -42,6 +42,15 @@ export function createPrismaPlaceRepository(
       });
     },
 
+    async existsById(id: string): Promise<boolean> {
+      const place = await prisma.place.findUnique({
+        where: { id },
+        select: { id: true },
+      });
+
+      return place !== null;
+    },
+
     findReviewsByPlaceId(placeId: string): Promise<Review[]> {
       return prisma.review.findMany({
         where: { placeId },
@@ -50,6 +59,52 @@ export function createPrismaPlaceRepository(
           user: { select: { id: true, name: true } },
         },
         orderBy: { createdAt: "desc" },
+      });
+    },
+
+    async reviewExists(placeId: string, userId: string): Promise<boolean> {
+      const review = await prisma.review.findUnique({
+        where: { placeId_userId: { placeId, userId } },
+        select: { id: true },
+      });
+
+      return review !== null;
+    },
+
+    createReview(
+      placeId: string,
+      userId: string,
+      input: CreateReviewRequest,
+    ): Promise<Review> {
+      return prisma.review.create({
+        data: {
+          placeId,
+          userId,
+          rating: input.rating,
+          body: input.body,
+        },
+        omit: { userId: true },
+        include: {
+          user: { select: { id: true, name: true } },
+        },
+      });
+    },
+
+    updateReview(
+      placeId: string,
+      userId: string,
+      input: CreateReviewRequest,
+    ): Promise<Review> {
+      return prisma.review.update({
+        where: { placeId_userId: { placeId, userId } },
+        data: {
+          rating: input.rating,
+          body: input.body,
+        },
+        omit: { userId: true },
+        include: {
+          user: { select: { id: true, name: true } },
+        },
       });
     },
 

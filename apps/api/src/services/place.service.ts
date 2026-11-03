@@ -1,4 +1,5 @@
 import type {
+  CreateReviewRequest,
   GetPlacesQuery,
   Place,
   PlaceDetail,
@@ -8,7 +9,10 @@ import type {
   PlaceRepository,
   PlaceWithReviews,
 } from "../types/repositories.js";
-import type { PlaceService } from "../types/services.js";
+import type {
+  PlaceService,
+  ReviewWriteResult,
+} from "../types/services.js";
 import { AppError } from "../errors/app-error.js";
 import { calculateWeightedRating } from "../utils/ranking.js";
 
@@ -116,6 +120,35 @@ export function createPlaceService(
 
     async listReviews(placeId: string): Promise<Review[]> {
       return placeRepository.findReviewsByPlaceId(placeId);
+    },
+
+    async createReview(
+      placeId: string,
+      userId: string,
+      input: CreateReviewRequest,
+    ): Promise<ReviewWriteResult> {
+      const placeExists = await placeRepository.existsById(placeId);
+
+      if (!placeExists) {
+        throw new AppError(
+          "PLACE_NOT_FOUND",
+          "The requested place was not found.",
+          404,
+        );
+      }
+
+      if (await placeRepository.reviewExists(placeId, userId)) {
+        const review = await placeRepository.updateReview(
+          placeId,
+          userId,
+          input,
+        );
+
+        return { review, created: false };
+      }
+
+      const review = await placeRepository.createReview(placeId, userId, input);
+      return { review, created: true };
     },
   };
 }

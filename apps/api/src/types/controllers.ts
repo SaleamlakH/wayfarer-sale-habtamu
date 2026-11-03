@@ -8,6 +8,7 @@ export interface PlaceController {
   list: (req: Request, res: Response) => Promise<void>;
   getById: (req: Request, res: Response) => Promise<void>;
   listReviews: (req: Request, res: Response) => Promise<void>;
+  createReview: (req: Request, res: Response) => Promise<void>;
 }
 
 export interface CategoryController {

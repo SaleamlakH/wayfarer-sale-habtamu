@@ -19,6 +19,9 @@ const userRepository = createPrismaUserRepository(prisma);
 const userService = createUserService(userRepository);
 const userController = createUserController(userService);
 
+export const authMiddleware: RequestHandler =
+  createAuthMiddleware(userRepository);
+
 export const usersRoute = createUserRouter(userController);
 
 const placeRepository = createPrismaPlaceRepository(prisma);
@@ -27,13 +30,10 @@ const placeService = createPlaceService(placeRepository, {
 });
 const placeController = createPlaceController(placeService);
 
-export const placesRoute = createPlaceRouter(placeController);
+export const placesRoute = createPlaceRouter(placeController, authMiddleware);
 
 const categoryRepository = createPrismaCategoryRepository(prisma);
 const categoryService = createCategoryService(categoryRepository);
 const categoryController = createCategoryController(categoryService);
 
 export const categoriesRoute = createCategoryRouter(categoryController);
-
-export const authMiddleware: RequestHandler =
-  createAuthMiddleware(userRepository);
