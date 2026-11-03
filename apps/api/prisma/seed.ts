@@ -102,8 +102,13 @@ const categories: CategorySeed[] = [
         openingHours: "09:00–17:00",
         reviews: [
           {
-            userName: "Abel",
+            userName: "Sara",
             rating: 5,
+            body: "A well-organized and informative museum.",
+          },
+          {
+            userName: "Abel",
+            rating: 4,
             body: "A good place to learn about Addis Ababa.",
           },
           {
@@ -127,13 +132,18 @@ const categories: CategorySeed[] = [
         reviews: [
           {
             userName: "Abel",
-            rating: 5,
+            rating: 4,
             body: "A fascinating collection of Ethiopian culture.",
           },
           {
             userName: "Liya",
             rating: 4,
             body: "Very interesting exhibits.",
+          },
+          {
+            userName: "Sara",
+            rating: 3,
+            body: "Interesting collection, but the layout was confusing.",
           },
         ],
         tourSlots: [
@@ -195,13 +205,18 @@ const categories: CategorySeed[] = [
         reviews: [
           {
             userName: "Abel",
-            rating: 5,
+            rating: 4,
             body: "A lovely place to explore.",
           },
           {
             userName: "Liya",
             rating: 4,
             body: "Well maintained and interesting.",
+          },
+          {
+            userName: "Sara",
+            rating: 3,
+            body: "Nice scenery, but it felt crowded.",
           },
         ],
         tourSlots: [],
@@ -226,6 +241,11 @@ const categories: CategorySeed[] = [
             userName: "Abel",
             rating: 5,
             body: "Excellent food and atmosphere.",
+          },
+          {
+            userName: "Liya",
+            rating: 3,
+            body: "The performances were good, but the service was slow.",
           },
         ],
         tourSlots: [],
@@ -265,6 +285,11 @@ const categories: CategorySeed[] = [
             rating: 4,
             body: "A remarkable historical and religious landmark.",
           },
+          {
+            userName: "Abel",
+            rating: 3,
+            body: "Beautiful building, but the visit was too brief.",
+          },
         ],
         tourSlots: [
           {
@@ -287,6 +312,16 @@ const categories: CategorySeed[] = [
             userName: "Sara",
             rating: 4,
             body: "An important central landmark.",
+          },
+          {
+            userName: "Abel",
+            rating: 3,
+            body: "A central location, but not much to see.",
+          },
+          {
+            userName: "Liya",
+            rating: 3,
+            body: "Busy and a bit underwhelming.",
           },
         ],
         tourSlots: [],
