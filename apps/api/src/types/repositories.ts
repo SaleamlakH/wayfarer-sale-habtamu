@@ -17,3 +17,7 @@ export interface PlaceWithReviews {
 export interface PlaceRepository {
   findAll(): Promise<PlaceWithReviews[]>;
 }
+
+export interface CategoryRepository {
+  findAll(): Promise<Category[]>;
+}
