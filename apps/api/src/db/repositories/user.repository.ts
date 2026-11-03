@@ -10,6 +10,13 @@ function createPrismaUserRepository(prisma: PrismaClient): UserRepository {
         orderBy: { name: "asc" },
       });
     },
+
+    findById(id: string): Promise<User | null> {
+      return prisma.user.findUnique({
+        where: { id },
+        select: { id: true, name: true },
+      });
+    },
   };
 }
 

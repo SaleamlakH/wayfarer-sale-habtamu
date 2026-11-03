@@ -1,7 +1,7 @@
 import express, { type Express, type Request, type Response } from "express";
 import cors from "cors";
 import { errorHandler } from "./middleware/error-handler.js";
-import { apiRouter } from "./composition.js";
+import { authMiddleware, usersRoute } from "./composition.js";
 
 const app: Express = express();
 
@@ -18,7 +18,14 @@ app.get("/health", (_req: Request, res: Response) => {
   res.send("Hello");
 });
 
-app.use("/api", apiRouter);
+app.use("/api/users", usersRoute);
+
+// all protected routes should be registered after
+// below this auth mw registeration
+app.use("/api", authMiddleware);
+
+// put auth requiring routes here
+
 app.use(errorHandler);
 
 export default app;
