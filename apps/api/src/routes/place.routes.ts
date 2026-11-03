@@ -6,5 +6,6 @@ export function createPlaceRouter(controller: PlaceController): Router {
   const router: Router = Router();
   router.get("/", placesQueryMiddleware, controller.list);
   router.get("/:placeId", controller.getById);
+  router.get("/:placeId/reviews", controller.listReviews);
   return router;
 }

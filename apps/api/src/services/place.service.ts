@@ -1,4 +1,9 @@
-import type { GetPlacesQuery, Place, PlaceDetail } from "@weyfarer/types";
+import type {
+  GetPlacesQuery,
+  Place,
+  PlaceDetail,
+  Review,
+} from "@weyfarer/types";
 import type {
   PlaceRepository,
   PlaceWithReviews,
@@ -107,6 +112,10 @@ export function createPlaceService(
         ...toPlace(place),
         tourSlots,
       };
+    },
+
+    async listReviews(placeId: string): Promise<Review[]> {
+      return placeRepository.findReviewsByPlaceId(placeId);
     },
   };
 }

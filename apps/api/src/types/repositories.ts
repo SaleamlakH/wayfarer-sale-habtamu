@@ -1,4 +1,4 @@
-import type { Category, User } from "@weyfarer/types";
+import type { Category, Review, User } from "@weyfarer/types";
 
 export interface UserRepository {
   findAll(): Promise<User[]>;
@@ -33,6 +33,7 @@ export interface PlaceFilters {
 export interface PlaceRepository {
   findAll(filters: PlaceFilters): Promise<PlaceWithReviews[]>;
   findById(id: string): Promise<PlaceWithTourSlots | null>;
+  findReviewsByPlaceId(placeId: string): Promise<Review[]>;
   getOverallAverageRating(): Promise<number | null>;
 }
 

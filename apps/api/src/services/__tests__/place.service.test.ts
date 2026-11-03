@@ -24,6 +24,7 @@ describe("place service listPlaces", () => {
         },
       ],
       findById: async () => null,
+      findReviewsByPlaceId: async () => [],
       getOverallAverageRating: async () => (100 * 4.8 + 4.5) / 101,
     };
 

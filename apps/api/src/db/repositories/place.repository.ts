@@ -1,3 +1,4 @@
+import type { Review } from "@weyfarer/types";
 import type { PrismaClient } from "../../../generated/prisma/client.js";
 import type {
   PlaceFilters,
@@ -38,6 +39,17 @@ export function createPrismaPlaceRepository(
             include: { bookings: { select: { seats: true } } },
           },
         },
+      });
+    },
+
+    findReviewsByPlaceId(placeId: string): Promise<Review[]> {
+      return prisma.review.findMany({
+        where: { placeId },
+        omit: { userId: true },
+        include: {
+          user: { select: { id: true, name: true } },
+        },
+        orderBy: { createdAt: "desc" },
       });
     },
 

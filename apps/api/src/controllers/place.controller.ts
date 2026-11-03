@@ -18,5 +18,13 @@ export function createPlaceController(
 
       res.json(place);
     },
+
+    listReviews: async (req: Request, res: Response): Promise<void> => {
+      const reviews = await placeService.listReviews(
+        req.params.placeId as string,
+      );
+
+      res.json(reviews);
+    },
   };
 }
