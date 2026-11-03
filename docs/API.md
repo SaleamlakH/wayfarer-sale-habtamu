@@ -107,10 +107,10 @@ Returns all categories in alphabetical order by name.
 
 | Name       | Location | Type   | Required | Description                                                                                                                 |
 | ---------- | -------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `category` | query    | string | No       | Category ID. Returns only places in that category.                                                                          |
+| `categoryId` | query    | string | No       | Category ID. Returns only places in that category.                                                                          |
 | `sort`     | query    | string | No       | `rate` returns places sorted by rating, top-scored first. Unset or any other value returns all places in the default order. |
 
-`category` and `sort` can be combined in a single request.
+`categoryId` and `sort` can be combined in a single request.
 
 **Response `200 OK`**
 

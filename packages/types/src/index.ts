@@ -1,5 +1,5 @@
 export interface GetPlacesQuery {
-  category?: string;
+  categoryId?: string;
   sort?: string;
 }
 
