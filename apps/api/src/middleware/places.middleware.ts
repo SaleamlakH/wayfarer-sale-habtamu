@@ -2,6 +2,20 @@ import type { RequestHandler } from "express";
 import type { CreateReviewRequest } from "@weyfarer/types";
 import { AppError } from "../errors/app-error.js";
 
+export const placesQueryMiddleware: RequestHandler = (req, _res, next) => {
+  const { categoryId, sort } = req.query;
+
+  const validCategoryId = typeof categoryId === "string" ? categoryId : null;
+  const validSort = sort === "rate" ? "rate" : null;
+
+  req.validQuery = {
+    ...(validCategoryId && { categoryId: validCategoryId }),
+    ...(validSort && { sort: validSort }),
+  };
+
+  next();
+};
+
 export const reviewBodyMiddleware: RequestHandler = (req, _res, next) => {
   const { rating, body } = (req.body ?? {}) as {
     rating?: unknown;

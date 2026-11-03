@@ -1,6 +1,8 @@
 import { Router, type RequestHandler } from "express";
-import { placesQueryMiddleware } from "../middleware/places-query.js";
-import { reviewBodyMiddleware } from "../middleware/review-body.js";
+import {
+  placesQueryMiddleware,
+  reviewBodyMiddleware,
+} from "../middleware/places.middleware.js";
 import type { PlaceController } from "../types/controllers.js";
 
 export function createPlaceRouter(
