@@ -1,13 +1,21 @@
 import type {
   Category,
   CreateReviewRequest,
-  Review,
   User,
 } from "@weyfarer/types";
 
 export interface UserRepository {
   findAll(): Promise<User[]>;
   findById(id: string): Promise<User | null>;
+}
+
+export interface ReviewRecord {
+  id: string;
+  placeId: string;
+  user: User;
+  rating: number;
+  body: string;
+  createdAt: Date;
 }
 
 export interface PlaceWithReviews {
@@ -39,18 +47,18 @@ export interface PlaceRepository {
   findAll(filters: PlaceFilters): Promise<PlaceWithReviews[]>;
   findById(id: string): Promise<PlaceWithTourSlots | null>;
   existsById(id: string): Promise<boolean>;
-  findReviewsByPlaceId(placeId: string): Promise<Review[]>;
+  findReviewsByPlaceId(placeId: string): Promise<ReviewRecord[]>;
   reviewExists(placeId: string, userId: string): Promise<boolean>;
   createReview(
     placeId: string,
     userId: string,
     input: CreateReviewRequest,
-  ): Promise<Review>;
+  ): Promise<ReviewRecord>;
   updateReview(
     placeId: string,
     userId: string,
     input: CreateReviewRequest,
-  ): Promise<Review>;
+  ): Promise<ReviewRecord>;
   getOverallAverageRating(): Promise<number | null>;
 }
 

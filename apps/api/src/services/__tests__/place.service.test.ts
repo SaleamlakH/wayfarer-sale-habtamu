@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi, type Mocked } from "vitest";
-import type { Review } from "@weyfarer/types";
-import type { PlaceRepository } from "../../types/repositories.js";
+import type {
+  PlaceRepository,
+  ReviewRecord,
+} from "../../types/repositories.js";
 import { createPlaceService } from "../place.service.js";
 
 function createMockPlaceRepository(): Mocked<PlaceRepository> {
@@ -56,7 +58,7 @@ describe("place service listPlaces", () => {
 
 describe("place service createReview", () => {
   it("updates the existing review for the same user and place", async () => {
-    const existingReview: Review = {
+    const existingReview: ReviewRecord = {
       id: "review_1",
       placeId: "place_1",
       user: { id: "user_1", name: "Amina" },
@@ -64,7 +66,7 @@ describe("place service createReview", () => {
       body: "Original review",
       createdAt: new Date("2026-10-14T18:05:00.000Z"),
     };
-    const updatedReview: Review = {
+    const updatedReview: ReviewRecord = {
       ...existingReview,
       rating: 3,
       body: "Updated review",
@@ -83,7 +85,13 @@ describe("place service createReview", () => {
       body: "Updated review",
     });
 
-    expect(result).toEqual({ review: updatedReview, created: false });
+    expect(result).toEqual({
+      review: {
+        ...updatedReview,
+        createdAt: updatedReview.createdAt.toISOString(),
+      },
+      created: false,
+    });
     expect(repository.updateReview).toHaveBeenCalledWith("place_1", "user_1", {
       rating: 3,
       body: "Updated review",

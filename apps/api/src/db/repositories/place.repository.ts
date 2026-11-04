@@ -1,10 +1,11 @@
-import type { CreateReviewRequest, Review } from "@weyfarer/types";
+import type { CreateReviewRequest } from "@weyfarer/types";
 import type { PrismaClient } from "../../../generated/prisma/client.js";
 import type {
   PlaceFilters,
   PlaceRepository,
   PlaceWithReviews,
   PlaceWithTourSlots,
+  ReviewRecord,
 } from "../../types/repositories.js";
 
 export function createPrismaPlaceRepository(
@@ -51,7 +52,7 @@ export function createPrismaPlaceRepository(
       return place !== null;
     },
 
-    findReviewsByPlaceId(placeId: string): Promise<Review[]> {
+    findReviewsByPlaceId(placeId: string): Promise<ReviewRecord[]> {
       return prisma.review.findMany({
         where: { placeId },
         omit: { userId: true },
@@ -75,7 +76,7 @@ export function createPrismaPlaceRepository(
       placeId: string,
       userId: string,
       input: CreateReviewRequest,
-    ): Promise<Review> {
+    ): Promise<ReviewRecord> {
       return prisma.review.create({
         data: {
           placeId,
@@ -94,7 +95,7 @@ export function createPrismaPlaceRepository(
       placeId: string,
       userId: string,
       input: CreateReviewRequest,
-    ): Promise<Review> {
+    ): Promise<ReviewRecord> {
       return prisma.review.update({
         where: { placeId_userId: { placeId, userId } },
         data: {

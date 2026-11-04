@@ -119,7 +119,12 @@ export function createPlaceService(
     },
 
     async listReviews(placeId: string): Promise<Review[]> {
-      return placeRepository.findReviewsByPlaceId(placeId);
+      const reviews = await placeRepository.findReviewsByPlaceId(placeId);
+
+      return reviews.map((review) => ({
+        ...review,
+        createdAt: review.createdAt.toISOString(),
+      }));
     },
 
     async createReview(
@@ -144,11 +149,18 @@ export function createPlaceService(
           input,
         );
 
-        return { review, created: false };
+        return {
+          review: { ...review, createdAt: review.createdAt.toISOString() },
+          created: false,
+        };
       }
 
       const review = await placeRepository.createReview(placeId, userId, input);
-      return { review, created: true };
+
+      return {
+        review: { ...review, createdAt: review.createdAt.toISOString() },
+        created: true,
+      };
     },
   };
 }
