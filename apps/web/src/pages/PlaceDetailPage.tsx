@@ -1,6 +1,8 @@
+import { useState } from "react";
 import type { Review } from "@weyfarer/types";
 import { BackToPlacesLink } from "../components/places/BackToPlacesLink";
 import { PlaceSidebar } from "../components/places/PlaceSidebar";
+import { ReviewDialog } from "../components/places/ReviewDialog";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { Spinner } from "../components/ui/Spinner";
@@ -14,6 +16,7 @@ import {
 
 export function PlaceDetailPage() {
   const { place, reviews } = usePlaceDetail();
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-4">
@@ -144,26 +147,56 @@ export function PlaceDetailPage() {
               </>
             ) : null}
 
-            <ReviewsSection reviews={reviews} />
+            <ReviewsSection
+              reviews={reviews}
+              onWriteReview={() => setReviewDialogOpen(true)}
+              canWriteReview={Boolean(place.data) && !reviews.loading}
+            />
           </div>
         </div>
       </div>
+
+      {place.data ? (
+        <ReviewDialog
+          open={reviewDialogOpen}
+          onClose={() => setReviewDialogOpen(false)}
+          placeId={place.data.id}
+          placeName={place.data.name}
+          reviews={reviews.data ?? []}
+          onSubmitted={() => {
+            reviews.refetch();
+            place.refetch();
+          }}
+        />
+      ) : null}
     </div>
   );
 }
 
 interface ReviewsSectionProps {
   reviews: AsyncData<Review[]>;
+  onWriteReview: () => void;
+  canWriteReview: boolean;
 }
 
-function ReviewsSection({ reviews }: ReviewsSectionProps) {
+function ReviewsSection({
+  reviews,
+  onWriteReview,
+  canWriteReview,
+}: ReviewsSectionProps) {
   return (
     <section className="pt-6 md:p-4">
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-(--ink-muted)">
           Reviews
         </h2>
-        <Button className="px-3 py-1.5">Review</Button>
+        <Button
+          className="px-3 py-1.5"
+          onClick={onWriteReview}
+          disabled={!canWriteReview}
+        >
+          + Write review
+        </Button>
       </div>
 
       {reviews.loading ? (
