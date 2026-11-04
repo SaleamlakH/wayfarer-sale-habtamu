@@ -19,7 +19,11 @@ const timeFormatter = new Intl.DateTimeFormat("en-US", {
 
 export function formatTourSlotDayTime(value: string): string {
   const date = new Date(value);
-  return `${weekdayFormatter.format(date)} ${timeFormatter.format(date)}`;
+  return `${weekdayFormatter.format(date)} ${formatTourSlotTime(value)}`;
+}
+
+export function formatTourSlotTime(value: string): string {
+  return timeFormatter.format(new Date(value));
 }
 
 export function formatTourSlotDate(value: string): string {

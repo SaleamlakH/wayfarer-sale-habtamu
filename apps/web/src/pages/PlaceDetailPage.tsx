@@ -1,6 +1,7 @@
 import { useState } from "react";
-import type { Review } from "@weyfarer/types";
+import type { Review, TourSlot } from "@weyfarer/types";
 import { BackToPlacesLink } from "../components/places/BackToPlacesLink";
+import { BookTourDialog } from "../components/places/BookTourDialog";
 import { PlaceSidebar } from "../components/places/PlaceSidebar";
 import { ReviewDialog } from "../components/places/ReviewDialog";
 import { Button } from "../components/ui/Button";
@@ -17,6 +18,7 @@ import {
 export function PlaceDetailPage() {
   const { place, reviews } = usePlaceDetail();
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState<TourSlot | null>(null);
 
   return (
     <div className="flex flex-col gap-4">
@@ -133,6 +135,7 @@ export function PlaceDetailPage() {
                                     isLowAvailability ? "urgent" : "primary"
                                   }
                                   className="px-3 py-1.5"
+                                  onClick={() => setSelectedSlot(slot)}
                                 >
                                   Book
                                 </Button>
@@ -167,6 +170,15 @@ export function PlaceDetailPage() {
             reviews.refetch();
             place.refetch();
           }}
+        />
+      ) : null}
+
+      {place.data && selectedSlot ? (
+        <BookTourDialog
+          placeName={place.data.name}
+          slot={selectedSlot}
+          onClose={() => setSelectedSlot(null)}
+          onBooked={place.refetch}
         />
       ) : null}
     </div>
