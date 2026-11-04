@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@import "./global.css";
+
+:root {
+  --accent: #2563eb;
+  --stars: #f97316;
+
+  --bg: #ffffff;
+  --surface-primary: #ffffff;
+  --surface-secondary: #fcfcfc;
+  --border: #e2e8f0;
+  --ink: #0f172a;
+  --ink-muted: #64748b;
+  --success: #16a34a;
+  --danger: #dc2626;
+}
