@@ -37,6 +37,14 @@ export function useForm<TValues extends object>({
     const { name, value } = event.target;
 
     setValues((current) => ({ ...current, [name]: value }) as TValues);
+    setErrors((current) => {
+      const next: FormErrors<TValues> = { ...current };
+
+      delete next[name as keyof TValues];
+      delete next.submit;
+
+      return next;
+    });
   }
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {

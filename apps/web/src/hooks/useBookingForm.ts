@@ -1,3 +1,5 @@
+import { useState } from "react";
+import type { Booking } from "@weyfarer/types";
 import { useUsersContext } from "../providers/user-provider/useUsersContext";
 import { createBooking } from "../services/booking.service";
 import { useForm, type FormErrors } from "./useForm";
@@ -10,16 +12,15 @@ interface UseBookingFormOptions {
   slotId: string;
   availableSeats: number;
   onBooked: () => void;
-  onClose: () => void;
 }
 
 export function useBookingForm({
   slotId,
   availableSeats,
   onBooked,
-  onClose,
 }: UseBookingFormOptions) {
   const { currentUser } = useUsersContext();
+  const [booking, setBooking] = useState<Booking | null>(null);
 
   function validate({ seats }: BookingValues): FormErrors<BookingValues> {
     const nextErrors: FormErrors<BookingValues> = {};
@@ -41,16 +42,23 @@ export function useBookingForm({
       throw new Error("No acting user selected.");
     }
 
-    await createBooking(slotId, { seats: Number(seats) }, currentUser.id);
+    const createdBooking = await createBooking(
+      slotId,
+      { seats: Number(seats) },
+      currentUser.id,
+    );
+
+    setBooking(createdBooking);
     onBooked();
-    onClose();
   }
 
-  return useForm<BookingValues>({
+  const form = useForm<BookingValues>({
     initialValues: {
       seats: "1",
     },
     validate,
     onSubmit: submit,
   });
+
+  return { ...form, booking };
 }
