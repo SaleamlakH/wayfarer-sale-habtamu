@@ -30,29 +30,21 @@ export function ReviewDialog({
   const existingReview =
     reviews.find((review) => review.user.id === currentUser?.id) ?? null;
 
-  const {
-    rating,
-    setRating,
-    body,
-    setBody,
-    errors,
-    submitting,
-    handleRatingChange,
-    handleBodyChange,
-    handleSubmit,
-  } = useReviewForm({
-    open,
-    placeId,
-    onSubmitted,
-    onClose,
-  });
+  const { values, reset, errors, submitting, handleChange, handleSubmit } =
+    useReviewForm({
+      placeId,
+      onSubmitted,
+      onClose,
+    });
 
   useEffect(() => {
     if (!open) return;
 
-    setRating(existingReview?.rating ?? 5);
-    setBody(existingReview?.body ?? "");
-  }, [open, existingReview, setRating, setBody]);
+    reset({
+      rating: String(existingReview?.rating ?? 5),
+      body: existingReview?.body ?? "",
+    });
+  }, [open, existingReview, reset]);
 
   return (
     <Modal open={open} onClose={onClose} ariaLabel="Write a review">
@@ -85,9 +77,10 @@ export function ReviewDialog({
           <div className="flex items-center gap-2">
             <Star className="text-lg" />
             <Select
+              name="rating"
               aria-label="Rating"
-              value={rating}
-              onChange={handleRatingChange}
+              value={values.rating}
+              onChange={handleChange}
               disabled={submitting}
               className="flex-1"
             >
@@ -109,10 +102,11 @@ export function ReviewDialog({
           </label>
           <Textarea
             id="review-body"
+            name="body"
             rows={4}
             placeholder="Write your review..."
-            value={body}
-            onChange={handleBodyChange}
+            value={values.body}
+            onChange={handleChange}
             disabled={submitting}
           />
           {errors.body ? (
