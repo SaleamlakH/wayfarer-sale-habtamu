@@ -57,3 +57,40 @@ export interface PlaceRepository {
 export interface CategoryRepository {
   findAll(): Promise<Category[]>;
 }
+
+export interface BookingRecord {
+  id: string;
+  slotId: string;
+  userId: string;
+  seats: number;
+  createdAt: Date;
+}
+
+export interface BookingSlotSnapshot {
+  id: string;
+  placeId: string;
+  startsAt: Date;
+  capacity: number;
+  bookedSeats: number;
+}
+
+export type CreateBookingResult =
+  | {
+      status: "created";
+      booking: BookingRecord;
+      tourSlot: BookingSlotSnapshot;
+    }
+  | { status: "slot_not_found" }
+  | {
+      status: "insufficient_capacity";
+      requestedSeats: number;
+      availableSeats: number;
+    };
+
+export interface BookingRepository {
+  createBooking(
+    slotId: string,
+    userId: string,
+    seats: number,
+  ): Promise<CreateBookingResult>;
+}

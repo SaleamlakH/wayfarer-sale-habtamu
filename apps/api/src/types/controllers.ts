@@ -14,3 +14,7 @@ export interface PlaceController {
 export interface CategoryController {
   list: (req: Request, res: Response) => Promise<void>;
 }
+
+export interface BookingController {
+  create: (req: Request, res: Response) => Promise<void>;
+}

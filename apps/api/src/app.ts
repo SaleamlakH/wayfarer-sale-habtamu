@@ -2,7 +2,7 @@ import express, { type Express, type Request, type Response } from "express";
 import cors from "cors";
 import { errorHandler } from "./middleware/error-handler.js";
 import {
-  authMiddleware,
+  bookingsRoute,
   categoriesRoute,
   placesRoute,
   usersRoute,
@@ -26,12 +26,7 @@ app.get("/health", (_req: Request, res: Response) => {
 app.use("/api/users", usersRoute);
 app.use("/api/places", placesRoute);
 app.use("/api/categories", categoriesRoute);
-
-// all protected routes should be registered after
-// below this auth mw registeration
-app.use("/api", authMiddleware);
-
-// put auth requiring routes here
+app.use("/api/tour-slots", bookingsRoute);
 
 app.use(errorHandler);
 

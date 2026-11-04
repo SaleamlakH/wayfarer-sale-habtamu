@@ -1,5 +1,7 @@
 import type {
+  Booking,
   Category,
+  CreateBookingRequest,
   CreateReviewRequest,
   GetPlacesQuery,
   Place,
@@ -30,4 +32,12 @@ export interface PlaceService {
 
 export interface CategoryService {
   listCategories(): Promise<Category[]>;
+}
+
+export interface BookingService {
+  createBooking(
+    slotId: string,
+    userId: string,
+    input: CreateBookingRequest,
+  ): Promise<Booking>;
 }
