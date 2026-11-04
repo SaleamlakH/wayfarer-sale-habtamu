@@ -93,7 +93,35 @@ const categories: CategorySeed[] = [
             body: "Well presented and educational.",
           },
         ],
-        tourSlots: [],
+        tourSlots: [
+          {
+            startsAt: "2026-11-09T09:00:00.000Z",
+            capacity: 10,
+            bookings: [
+              { userName: "Sara", seats: 4 },
+              { userName: "Abel", seats: 3 },
+              { userName: "Liya", seats: 2 },
+            ],
+          },
+          {
+            startsAt: "2026-11-09T11:00:00.000Z",
+            capacity: 10,
+            bookings: [
+              { userName: "Sara", seats: 2 },
+              { userName: "Abel", seats: 2 },
+              { userName: "Liya", seats: 1 },
+            ],
+          },
+          {
+            startsAt: "2026-11-09T14:00:00.000Z",
+            capacity: 8,
+            bookings: [
+              { userName: "Sara", seats: 2 },
+              { userName: "Abel", seats: 1 },
+              { userName: "Liya", seats: 1 },
+            ],
+          },
+        ],
       },
       {
         name: "Addis Ababa Museum",
@@ -117,7 +145,24 @@ const categories: CategorySeed[] = [
             body: "Interesting historical information.",
           },
         ],
-        tourSlots: [],
+        tourSlots: [
+          {
+            startsAt: "2026-11-10T10:00:00.000Z",
+            capacity: 8,
+            bookings: [
+              { userName: "Sara", seats: 1 },
+              { userName: "Abel", seats: 1 },
+            ],
+          },
+          {
+            startsAt: "2026-11-10T15:00:00.000Z",
+            capacity: 6,
+            bookings: [
+              { userName: "Sara", seats: 4 },
+              { userName: "Abel", seats: 2 },
+            ],
+          },
+        ],
       },
     ],
   },
@@ -219,7 +264,29 @@ const categories: CategorySeed[] = [
             body: "Nice scenery, but it felt crowded.",
           },
         ],
-        tourSlots: [],
+        tourSlots: [
+          {
+            startsAt: "2026-11-11T09:00:00.000Z",
+            capacity: 10,
+            bookings: [
+              { userName: "Sara", seats: 4 },
+              { userName: "Abel", seats: 4 },
+            ],
+          },
+          {
+            startsAt: "2026-11-11T11:30:00.000Z",
+            capacity: 6,
+            bookings: [
+              { userName: "Sara", seats: 2 },
+              { userName: "Abel", seats: 1 },
+            ],
+          },
+          {
+            startsAt: "2026-11-11T14:00:00.000Z",
+            capacity: 6,
+            bookings: [],
+          },
+        ],
       },
     ],
   },
@@ -248,7 +315,25 @@ const categories: CategorySeed[] = [
             body: "The performances were good, but the service was slow.",
           },
         ],
-        tourSlots: [],
+        tourSlots: [
+          {
+            startsAt: "2026-11-12T18:00:00.000Z",
+            capacity: 10,
+            bookings: [
+              { userName: "Sara", seats: 4 },
+              { userName: "Abel", seats: 2 },
+              { userName: "Liya", seats: 2 },
+            ],
+          },
+          {
+            startsAt: "2026-11-12T20:00:00.000Z",
+            capacity: 8,
+            bookings: [
+              { userName: "Sara", seats: 2 },
+              { userName: "Abel", seats: 2 },
+            ],
+          },
+        ],
       },
       {
         name: "Tomoca Coffee",
@@ -262,7 +347,24 @@ const categories: CategorySeed[] = [
             body: "Excellent Ethiopian coffee.",
           },
         ],
-        tourSlots: [],
+        tourSlots: [
+          {
+            startsAt: "2026-11-13T08:00:00.000Z",
+            capacity: 6,
+            bookings: [
+              { userName: "Sara", seats: 1 },
+              { userName: "Abel", seats: 1 },
+            ],
+          },
+          {
+            startsAt: "2026-11-13T10:00:00.000Z",
+            capacity: 6,
+            bookings: [
+              { userName: "Sara", seats: 3 },
+              { userName: "Abel", seats: 3 },
+            ],
+          },
+        ],
       },
     ],
   },
@@ -324,7 +426,34 @@ const categories: CategorySeed[] = [
             body: "Busy and a bit underwhelming.",
           },
         ],
-        tourSlots: [],
+        tourSlots: [
+          {
+            startsAt: "2026-11-14T09:00:00.000Z",
+            capacity: 10,
+            bookings: [
+              { userName: "Sara", seats: 2 },
+              { userName: "Abel", seats: 2 },
+              { userName: "Liya", seats: 2 },
+            ],
+          },
+          {
+            startsAt: "2026-11-14T12:00:00.000Z",
+            capacity: 10,
+            bookings: [
+              { userName: "Sara", seats: 2 },
+              { userName: "Abel", seats: 2 },
+              { userName: "Liya", seats: 1 },
+            ],
+          },
+          {
+            startsAt: "2026-11-14T17:00:00.000Z",
+            capacity: 8,
+            bookings: [
+              { userName: "Sara", seats: 2 },
+              { userName: "Abel", seats: 1 },
+            ],
+          },
+        ],
       },
     ],
   },
