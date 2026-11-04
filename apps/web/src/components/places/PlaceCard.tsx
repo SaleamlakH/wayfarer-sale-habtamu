@@ -5,17 +5,19 @@ import { Star } from "../ui/Star";
 
 interface PlaceCardProps {
   place: Place;
+  selected?: boolean;
 }
 
-export function PlaceCard({ place }: PlaceCardProps) {
+export function PlaceCard({ place, selected = false }: PlaceCardProps) {
   const { average, reviewCount } = place.rating;
 
   return (
     <Link
       to={`/places/${place.id}`}
+      aria-current={selected ? "page" : undefined}
       className="group block h-full rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
     >
-      <Card className="flex h-full flex-col gap-1.5 transition-colors group-hover:border-(--accent) group-hover:bg-(--accent)/5">
+      <Card className="flex h-full flex-col gap-1.5 transition-colors group-hover:border-(--accent) group-hover:bg-(--accent)/5 group-aria-[current=page]:border-(--accent) group-aria-[current=page]:bg-(--accent)/5">
         <span className="font-semibold text-(--ink)">{place.name}</span>
         <span
           className="flex flex-wrap items-center gap-1 text-sm"
