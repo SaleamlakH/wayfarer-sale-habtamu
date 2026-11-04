@@ -65,15 +65,15 @@ The backend is responsible for business rules, rating calculations, booking avai
 
 ## 3. Technology Stack
 
-| Area            | Technology   |
-| --------------- | ------------ |
-| Language        | TypeScript   |
-| Frontend        | React        |
-| Backend         | Node.js      |
-| API Framework   | Express      |
-| Database        | PostgreSQL   |
-| ORM             | Prisma       |
-| Package Manager | pnpm         |
+| Area            | Technology |
+| --------------- | ---------- |
+| Language        | TypeScript |
+| Frontend        | React      |
+| Backend         | Node.js    |
+| API Framework   | Express    |
+| Database        | PostgreSQL |
+| ORM             | Prisma     |
+| Package Manager | pnpm       |
 
 ## 4. Project Structure
 
@@ -81,8 +81,20 @@ The backend is responsible for business rules, rating calculations, booking avai
 wayfarer/
 ├── apps/
 │   ├── api/
+│   │   ├── src/
+│   │   │   ├── errors/
+│   │   │   ├── db/
+│   │   │   ├── services/
+│   │   │   ├── controllers/
+│   │   │   ├── middleware/
+│   │   │   └── routes/
 │   │   └── .env.example
 │   └── web/
+│       ├── src/
+│       │   ├── components/
+│       │   ├── layouts/
+│       │   ├── providers/
+│       │   └── pages/
 │       └── .env.example
 ├── packages/
 │   └── types/
@@ -125,10 +137,10 @@ The request-processing flow is:
 Routes
   |
   v
-Middlewares --------> Repositories
-  |                       |
-  v                       v
-Controllers            Database
+Middlewares
+  |
+  v
+Controllers
   |
   v
 Services
@@ -142,14 +154,14 @@ Database
 
 ### Layer Responsibilities
 
-| Layer        | Responsibility                                                                                  |
-| ------------ | ----------------------------------------------------------------------------------------------- |
-| Routes       | Define API endpoints and connect middleware and controllers.                                    |
+| Layer        | Responsibility                                                                                     |
+| ------------ | -------------------------------------------------------------------------------------------------- |
+| Routes       | Define API endpoints and connect middleware and controllers.                                       |
 | Middlewares  | Retrieve and attach the acting user through the repository, and perform validation when available. |
-| Controllers  | Extract request information, invoke services, and return responses.                 |
-| Services     | Implement application operations and business rules.                                |
-| Repositories | Handle database queries, persistence, and transaction execution.                    |
-| Errors       | Provide centralized application error handling.                                     |
+| Controllers  | Extract request information, invoke services, and return responses.                                |
+| Services     | Implement application operations and business rules.                                               |
+| Repositories | Handle database queries, persistence, and transaction execution.                                   |
+| Errors       | Provide centralized application error handling.                                                    |
 
 Dependencies are constructed and injected through the application composition root. Individual layers do not instantiate their own dependencies.
 
@@ -264,16 +276,16 @@ Run the test suite with `pnpm test`.
 
 The API provides the following main operations. Request and response contracts, including the shared error envelope, are documented in [docs/API.md](docs/API.md).
 
-| Resource | Operation               | Description                                                                        |
-| -------- | ----------------------- | ---------------------------------------------------------------------------------- |
-| Health   | Check API status        | Returns `Hello` when the API is running.                                           |
-| Users    | Fetch users             | Retrieve predefined users for the acting-as selector.                              |
-| Categories | List categories       | Retrieve categories for filtering places.                                          |
-| Places   | List places             | Retrieve places with category filtering and rating-based sorting.                  |
-| Places   | Get place details       | Retrieve place information and tour slot availability.                             |
-| Bookings | Create booking          | Reserve a requested quantity of seats in a tour slot.                              |
-| Reviews  | Create or update review | Create a review or update the existing review for the same user and place.         |
-| Reviews  | List reviews            | Retrieve reviews associated with a place.                                          |
+| Resource   | Operation               | Description                                                                |
+| ---------- | ----------------------- | -------------------------------------------------------------------------- |
+| Health     | Check API status        | Returns `Hello` when the API is running.                                   |
+| Users      | Fetch users             | Retrieve predefined users for the acting-as selector.                      |
+| Categories | List categories         | Retrieve categories for filtering places.                                  |
+| Places     | List places             | Retrieve places with category filtering and rating-based sorting.          |
+| Places     | Get place details       | Retrieve place information and tour slot availability.                     |
+| Bookings   | Create booking          | Reserve a requested quantity of seats in a tour slot.                      |
+| Reviews    | Create or update review | Create a review or update the existing review for the same user and place. |
+| Reviews    | List reviews            | Retrieve reviews associated with a place.                                  |
 
 Sorting, filtering, availability calculations, and business rules are handled by the backend.
 
