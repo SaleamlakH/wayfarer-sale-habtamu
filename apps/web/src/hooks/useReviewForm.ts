@@ -1,3 +1,5 @@
+import { useCallback, useState } from "react";
+import type { Review } from "@weyfarer/types";
 import { useUsersContext } from "../providers/user-provider/useUsersContext";
 import { createReview } from "../services/places.service";
 import { useForm, type FormErrors } from "./useForm";
@@ -10,15 +12,18 @@ interface ReviewValues {
 interface UseReviewFormOptions {
   placeId: string;
   onSubmitted: () => void;
-  onClose: () => void;
 }
 
 export function useReviewForm({
   placeId,
   onSubmitted,
-  onClose,
 }: UseReviewFormOptions) {
   const { currentUser } = useUsersContext();
+  const [review, setReview] = useState<Review | null>(null);
+
+  const clearReview = useCallback(() => {
+    setReview(null);
+  }, []);
 
   function validate({ rating, body }: ReviewValues): FormErrors<ReviewValues> {
     const nextErrors: FormErrors<ReviewValues> = {};
@@ -44,16 +49,17 @@ export function useReviewForm({
       throw new Error("No acting user selected.");
     }
 
-    await createReview(
+    const createdReview = await createReview(
       placeId,
       { rating: Number(rating), body: body.trim() },
       currentUser.id,
     );
+
+    setReview(createdReview);
     onSubmitted();
-    onClose();
   }
 
-  return useForm<ReviewValues>({
+  const form = useForm<ReviewValues>({
     initialValues: {
       rating: "5",
       body: "",
@@ -61,4 +67,6 @@ export function useReviewForm({
     validate,
     onSubmit: submit,
   });
+
+  return { ...form, review, clearReview };
 }
