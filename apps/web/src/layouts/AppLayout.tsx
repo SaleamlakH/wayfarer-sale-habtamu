@@ -4,7 +4,7 @@ import { UserSwitcher } from "../components/user-switcher/UserSwitcher";
 export function AppLayout() {
   return (
     <div className="min-h-screen bg-(--bg)">
-      <header className="border-b border-(--border) bg-(--surface-primary)">
+      <header className="sticky top-0 z-10 border-b border-(--border) bg-(--surface-primary)">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
           <Link
             to="/"
