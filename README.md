@@ -202,36 +202,15 @@ Create the PostgreSQL database specified in your environment configuration.
 Apply database migrations:
 
 ```bash
-pnpm db:migrate
+pnpm db:push      # sync the Prisma schema without migrations
+pnpm db:seed      # seed without affecting existing data
 ```
 
-Seed the database with the initial users, places, reviews, and tour slots:
-
-```bash
-pnpm db:seed
-```
-
-### 5. Build workspace dependencies
+### 5. Build and start the application
 
 ```bash
 pnpm build
-```
-
-### 6. Start the application
-
-```bash
 pnpm dev
-```
-
-## 7. Development Scripts
-
-```bash
-pnpm dev          # Start the API and web development servers.
-pnpm build        # Build workspace packages and applications in dependency order.
-pnpm typecheck    # Type-check all packages and applications.
-pnpm test         # Run the API test suite, including database integration tests.
-pnpm db:migrate   # Apply database migrations in development.
-pnpm db:seed      # Seed the database with initial application data.
 ```
 
 ## 8. Database and Seed Data
@@ -247,7 +226,7 @@ The seed data includes:
 
 At least one place has only one or two reviews to demonstrate why average ratings alone are insufficient for reliable ranking.
 
-Database migration and seeding commands are listed in [Development Scripts](#7-development-scripts).
+Database migration and seeding commands are listed in [Getting Started](#6-getting-started).
 
 ## 9. Running Tests
 
