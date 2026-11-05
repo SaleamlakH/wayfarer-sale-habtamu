@@ -1,8 +1,10 @@
 # Wayfarer
 
-**Honest Ratings, Fair Bookings**
+Wayfarer is a full-stack web application that helps travellers browse places within a selected city, view place details, explore guided tours, read reviews, and reserve seats.
 
-Wayfarer is a full-stack web application that helps travellers discover places in a city, explore guided tours, read reviews, and reserve seats.
+The application uses a seeded user system rather than authentication. Users can switch between predefined accounts through an acting-as selector in the frontend.
+
+The backend is responsible for business rules, rating calculations, booking availability, and data consistency.
 
 The application focuses on two important problems:
 
@@ -11,25 +13,66 @@ The application focuses on two important problems:
 
 ## Table of Contents
 
-- [1. Overview](#1-overview)
+- [1. Getting Started](#1-getting-started)
 - [2. Features](#2-features)
 - [3. Technology Stack](#3-technology-stack)
 - [4. Project Structure](#4-project-structure)
 - [5. Architecture](#5-architecture)
-- [6. Getting Started](#6-getting-started)
-- [7. Development Scripts](#7-development-scripts)
-- [8. Database and Seed Data](#8-database-and-seed-data)
-- [9. Running Tests](#9-running-tests)
-- [10. API Overview](#10-api-overview)
-- [11. Known Limitations](#11-known-limitations)
+- [6. Database and Seed Data](#6-database-and-seed-data)
+- [7. Running Tests](#7-running-tests)
+- [8. API Overview](#8-api-overview)
+- [9. Known Limitations](#9-known-limitations)
 
-## 1. Overview
+## 1. Getting Started
 
-Wayfarer allows travellers to browse places within a selected city, view place details, explore available guided tours, and submit reviews.
+### Prerequisites
 
-The application uses a seeded user system rather than authentication. Users can switch between predefined accounts through an acting-as selector in the frontend.
+- Node.js
+- pnpm
+- PostgreSQL
 
-The backend is responsible for business rules, rating calculations, booking availability, and data consistency.
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd wayfarer
+```
+
+### 2. Install dependencies
+
+```bash
+pnpm install
+```
+
+### 3. Configure environment variables
+
+Each application has its own example environment file. Copy both and configure the required values.
+
+```bash
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env
+```
+
+### 4. Prepare the database
+
+Create the PostgreSQL database specified in your environment configuration.
+
+Apply database migrations:
+
+```bash
+pnpm db:push      # sync the schema without migrations
+pnpm db:seed      # seed without affecting existing data
+```
+
+### 5. Build and start the application
+
+> make sure the web app address is listed in CORS_ORIGINS env variable for the api
+
+```bash
+pnpm db:generate  # generate the types
+pnpm build        # build apps and their dependency
+pnpm dev          # start applications
+```
 
 ## 2. Features
 
@@ -117,8 +160,6 @@ The `docs` directory contains technical decisions and project reference document
 
 The shared types package contains contracts exchanged between the frontend and backend, including request shapes, response shapes, and API error contracts.
 
-It does not contain database models or business logic.
-
 ### API
 
 The API contains the application logic, request handling, database operations, and centralized error handling.
@@ -134,22 +175,7 @@ The backend follows a layered architecture with dependency injection.
 The request-processing flow is:
 
 ```text
-Routes
-  |
-  v
-Middlewares
-  |
-  v
-Controllers
-  |
-  v
-Services
-  |
-  v
-Repositories
-  |
-  v
-Database
+Routes --> Middlewares --> Controllers --> Services --> Repositories --> Database
 ```
 
 ### Layer Responsibilities
@@ -165,55 +191,7 @@ Database
 
 Dependencies are constructed and injected through the application composition root. Individual layers do not instantiate their own dependencies.
 
-## 6. Getting Started
-
-### Prerequisites
-
-- Node.js
-- pnpm
-- PostgreSQL
-
-### 1. Clone the repository
-
-```bash
-git clone <repository-url>
-cd wayfarer
-```
-
-### 2. Install dependencies
-
-```bash
-pnpm install
-```
-
-### 3. Configure environment variables
-
-Each application has its own example environment file. Copy both and configure the required values.
-
-```bash
-cp apps/api/.env.example apps/api/.env
-cp apps/web/.env.example apps/web/.env
-```
-
-### 4. Prepare the database
-
-Create the PostgreSQL database specified in your environment configuration.
-
-Apply database migrations:
-
-```bash
-pnpm db:push      # sync the Prisma schema without migrations
-pnpm db:seed      # seed without affecting existing data
-```
-
-### 5. Build and start the application
-
-```bash
-pnpm build
-pnpm dev
-```
-
-## 8. Database and Seed Data
+## 6. Database and Seed Data
 
 The application uses PostgreSQL for persistent storage.
 
@@ -226,30 +204,25 @@ The seed data includes:
 
 At least one place has only one or two reviews to demonstrate why average ratings alone are insufficient for reliable ranking.
 
-Database migration and seeding commands are listed in [Getting Started](#6-getting-started).
+Database migration and seeding commands are added in the package.json of root and api.
 
 ## 9. Running Tests
 
-The API test suite covers the application's important business rules and data consistency requirements.
+The API test suite covers the core business rules and runs with Vitest.
 
-The test suite includes:
+Run the full API test suite from the repository root:
 
-### Highest Priority
+```bash
+pnpm test
+```
 
-- Rating calculation: verify that ranking accounts for both average rating and review count.
-- Concurrent booking: verify that simultaneous booking requests cannot exceed slot capacity.
+The booking integration test uses a real PostgreSQL database. It uses `TEST_DATABASE_URL` when set, otherwise it uses `DATABASE_URL`.
 
-### Additional
+### Implemented Coverage
 
-- Review creation: verify that the first review creates a database record.
-- Review update: verify that subsequent reviews from the same user update the existing record.
-- Insufficient capacity: verify that bookings are rejected when the requested quantity exceeds available seats.
-- Slot availability: verify remaining seat calculations and full-slot status.
-- User identification: verify identification through the `X-User-Id` header.
-
-All required tests should be executable through a single command.
-
-Run the test suite with `pnpm test`.
+- **Rating calculation** — one 5.0 review must not outrank 100 reviews averaging 4.7, and a place with more reviews must outrank an equally rated place with fewer reviews.
+- **Concurrent booking and capacity** — last-seat races, all-or-nothing rejection, high contention, fully booked slots, and availability fields are verified against PostgreSQL.
+- **Review updates** — a second review from the same user updates that user's existing review for the place.
 
 ## 10. API Overview
 
@@ -276,4 +249,3 @@ The health endpoint is served at `/health`, outside the `/api` base path.
 - User identification relies on a predefined user ID supplied through a request header.
 - The application is designed around a selected city.
 - Booking functionality focuses on reserving quantities of seats rather than selecting individually numbered seats.
-- Mobile responsiveness is outside the initial implementation scope unless the required functionality is completed ahead of schedule.
