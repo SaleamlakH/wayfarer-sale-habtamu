@@ -37,7 +37,7 @@ The application focuses on two important problems:
 
 ```bash
 git clone https://github.com/SaleamlakH/wayfarer-sale-habtamu.git
-cd wayfarer
+cd wayfarer-sale-habtamu
 ```
 
 ### 2. Install dependencies
@@ -63,6 +63,7 @@ Apply database migrations:
 
 ```bash
 pnpm db:push      # sync the schema without migrations
+pnpm db:generate  # generate the client and types
 pnpm db:seed      # seed without affecting existing data
 ```
 
@@ -71,7 +72,6 @@ pnpm db:seed      # seed without affecting existing data
 > make sure the web app address is listed in CORS_ORIGINS env variable for the api
 
 ```bash
-pnpm db:generate  # generate the types
 pnpm build        # build apps and their dependency
 pnpm dev          # start applications
 ```
