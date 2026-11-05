@@ -2,18 +2,12 @@
 
 This document records the major architectural and technical decisions made during the development of Wayfarer, including the reasoning behind the selected approaches and their trade-offs.
 
-The two central correctness decisions are documented first: rating and ranking, and concurrent booking.
+The document focuses on the two central correctness decisions: rating and ranking, and concurrent booking.
 
 ## Table of Contents
 
 - [1. Rating and Ranking](#1-rating-and-ranking)
 - [2. Booking and Concurrency](#2-booking-and-concurrency)
-- [3. Project Architecture](#3-project-architecture)
-- [4. Shared Types](#4-shared-types)
-- [5. Dependency Injection](#5-dependency-injection)
-- [6. Error Handling](#6-error-handling)
-- [7. Database and Repository Pattern](#7-database-and-repository-pattern)
-- [8. Testing Strategy](#8-testing-strategy)
 
 ## 1. Rating and Ranking
 
@@ -150,115 +144,3 @@ The concurrency behavior is verified against a real PostgreSQL database:
 - **Insufficient capacity:** a request larger than the remaining seats is rejected in full, with no partial booking created.
 
 These cases verify that booked seats never exceed capacity and that successful requests always reserve their full quantity.
-
-## 3. Project Architecture
-
-The application follows a layered architecture that separates HTTP request handling, application logic, and database operations.
-
-The project is organized into three main packages:
-
-- `packages/types`: Shared request, response, and API error contracts.
-- `apps/api`: Backend application and API implementation.
-- `apps/web`: Frontend application.
-
-The architecture prioritizes separation of responsibilities, dependency injection, and testability without introducing unnecessary abstractions.
-
-### Backend Dependency Flow
-
-```text
-Routes --> Middlewares --> Controllers --> Services --> Repositories --> Database
-```
-
-Each layer receives its dependencies through dependency injection rather than constructing its own dependencies.
-
-### Middleware Responsibilities
-
-Middlewares prepare the request before it reaches the controller.
-
-For this project, middleware responsibilities include:
-
-- Extracting the acting user's ID from the request.
-- Retrieving the corresponding user through the repository.
-- Attaching the resolved user to the request object.
-- Performing request validation when the validation layer is available.
-
-Middleware may depend on repositories for data retrieval and on validation functionality when available. It does not depend on services for these responsibilities.
-
-## 4. Shared Types
-
-A dedicated shared package is used to define contracts between the frontend and backend.
-
-Its responsibilities include:
-
-- Request shapes.
-- Response shapes.
-- API error codes.
-- API error response shapes.
-
-This separation prevents frontend contracts from becoming coupled to the database schema or backend implementation.
-
-## 5. Dependency Injection
-
-Dependencies are constructed in a composition root and injected into the components that require them.
-
-This approach provides:
-
-- Explicit dependencies.
-- Easier unit and integration testing.
-- Reduced coupling between layers.
-- The ability to replace implementations without changing dependent business logic.
-
-Services depend on repository interfaces rather than directly accessing the database client.
-
-## 6. Error Handling
-
-The API uses a centralized application error mechanism.
-
-A single `AppError` implementation represents expected application errors using predefined error codes.
-
-The shared types package defines the error codes and response contract, while the API owns the error implementation and HTTP status mapping.
-
-Error handling responsibilities are separated as follows:
-
-- Services throw application errors when business rules cannot be satisfied.
-- Controllers do not individually translate application errors.
-- Centralized error middleware converts errors into consistent HTTP responses.
-- The frontend interprets shared error codes and presents appropriate feedback.
-
-This avoids duplicated error-handling logic across controllers and services.
-
-## 7. Database and Repository Pattern
-
-Database operations are separated from business logic through repositories.
-
-Services depend on repository interfaces, while repository implementations handle persistence and database-specific operations.
-
-The repository layer is responsible for:
-
-- Database queries.
-- Creating and updating records.
-- Retrieving related data.
-- Executing database transactions.
-- Implementing concurrency-control operations.
-
-Services coordinate application operations and define the required business behavior without depending directly on ORM-specific APIs.
-
-### ORM and Database Access
-
-Prisma is used for schema management, migrations, and ordinary database operations.
-
-Repository implementations encapsulate Prisma queries so that services do not depend directly on the ORM.
-
-Raw SQL may be used for database operations that require functionality not conveniently exposed through Prisma. This is particularly relevant to the booking concurrency requirement, which uses PostgreSQL row-level locking.
-
-## 8. Testing Strategy
-
-Testing focuses on application behavior and the areas most vulnerable to incorrect implementation.
-
-### Implemented Coverage
-
-- Rating calculation: weighted scores are compared for places with the same average but different review counts, places with different averages and review counts, a single 5.0 review against a 4.8 average over 100 reviews, zero-review places, and a zero minimum review count.
-- Concurrent booking and insufficient capacity: concurrent requests are checked for last-seat races, all-or-nothing rejection, high contention, fully booked slots, and availability fields against a real PostgreSQL database.
-- Review updates: a second review from the same user updates that user's existing review for the place.
-
-The concurrency tests exercise actual database transaction behavior rather than mocked database operations.
