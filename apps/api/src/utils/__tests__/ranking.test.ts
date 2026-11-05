@@ -24,7 +24,7 @@ describe("calculateWeightedRating", () => {
     const manyHighReviews = calculateWeightedRating({
       overallAverageRating: 4.5,
       minimumReviewCount: 10,
-      averageRating: 4.8,
+      averageRating: 4.7,
       reviewCount: 100,
     });
 
@@ -56,7 +56,7 @@ describe("calculateWeightedRating", () => {
     const aboveAverageRating = calculateWeightedRating({
       overallAverageRating: 4.5,
       minimumReviewCount: 10000,
-      averageRating: 4.8,
+      averageRating: 4.6,
       reviewCount: 1,
     });
 
